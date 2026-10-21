@@ -1,9 +1,13 @@
 package com.onlinelibrary.spring_boot_library.controller;
 
 import com.onlinelibrary.spring_boot_library.entity.Review;
+import com.onlinelibrary.spring_boot_library.requestmodel.ReviewRequest;
 import com.onlinelibrary.spring_boot_library.service.ReviewService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,4 +29,21 @@ public class ReviewController {
         return reviewService.getReviewsByBookId(bookId, pageNo, pageSize);
     }
 
+    @GetMapping("/book/{bookId}/average-rating")
+    public Double getAverageRating(@PathVariable Long bookId) {
+        return reviewService.getAverageRating(bookId);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Review createReview(@Valid @RequestBody ReviewRequest reviewRequest, Authentication authentication) throws Exception {
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        String userEmail = jwt.getClaimAsString("email");
+
+        if (userEmail == null || userEmail.isEmpty()) {
+            throw new IllegalArgumentException("User email not found in token");
+        }
+
+        return reviewService.createReview(userEmail, reviewRequest);
+    }
 }
