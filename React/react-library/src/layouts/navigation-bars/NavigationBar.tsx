@@ -31,6 +31,13 @@ export const NavigationBar = () => {
                 Search Books
               </NavLink>
             </li>
+            {isAuthenticated && (
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/shelf">
+                  Shelf
+                </NavLink>
+              </li>
+            )}
           </ul>
           <ul className="navbar-nav ms-auto">
             {isAuthenticated ? (

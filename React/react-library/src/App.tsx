@@ -9,6 +9,7 @@ import { ReviewListPage } from "./layouts/review-list-page/ReviewListPage";
 import { AuthProvider } from "./auth/AuthContext";
 import { ProtectedPage } from "./layouts/protected-page/ProtectedPage";
 import { PrivateRoute } from "./auth/PrivateRoute";
+import { ShelfPage } from "./layouts/shelf-page/ShelfPage";
 
 function App() {
   return (
@@ -26,6 +27,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <ProtectedPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/shelf"
+              element={
+                <PrivateRoute>
+                  <ShelfPage />
                 </PrivateRoute>
               }
             />
